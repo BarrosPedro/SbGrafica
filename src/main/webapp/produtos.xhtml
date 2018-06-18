@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>SB Gráfica</title>
+         <link rel="shortcut icon" href="https://raw.githubusercontent.com/ifpe-cti/sysgraph/master/docs/favicon(1).ico" type="image/x-icon"/>
+         <link rel="icon" href="https://raw.githubusercontent.com/ifpe-cti/sysgraph/master/docs/favicon(1).ico" type="image/x-icon"/>
+    </h:head>
+    <h:body>
+        
+     <p:layout fullPage="true">
+
+            <p:layoutUnit id="top" position="north" size="130" >
+            <!-- topo-->
+            
+            <center><h:graphicImage value = "/imagens/logo.png" width="20%"/></center>
+        
+            </p:layoutUnit>
+
+            <p:layoutUnit id="left" position="west"  resizable="false"  closable="false" collapsible="false" header="Menu"  size="265" >
+                        <!-- esquerda com menu-->
+                <h:form>
+                    <p:menu>
+                        
+                        <p:menuitem value="Home" url="index.xhtml" icon="ui-icon-home"/>
+          
+                        <p:menuitem value="Vendas" url="venda.xhtml"/>
+                  
+                        <p:menuitem value="Produtos" url="produto.xhtml"/>
+                    
+                        <p:menuitem value="Estoque" url="crudLei.xhtml"/>      
+   
+                        <p:menuitem value="Funcionários" url="funcionario.xhtml"/>   
+                        
+                        <p:menuitem value="Clientes" url="cliente.xhtml"/>      
+                        
+                        <p:menuitem value="Log do Sistema" url="log.xhtml"/>     
+                        
+                        <p:menuitem value="Relatórios Financeiros" url="mensal.xhtml"/>
+                    </p:menu>
+                   
+                        
+                     
+                </h:form>
+            </p:layoutUnit>
+
+         <p:layoutUnit id="center" position="center" header="Produto">
+                <!--centro-->
+                  <p:growl id="gro" showDetail="true" showSummary="true"/>
+                     <h:form id="formCadastroProduto">        
+             
+                         <p:dataTable var="item" value="#{produtoController.recuperarTodosProdutos()}"
+                         rowKey="#{item.codigo}" paginator="true"
+                         rows="7">
+                
+                <p:column headerText="Codigo" style="width: 8%">
+                    <h:outputText value="#{item.codigo}"/>
+                </p:column>
+                <p:column headerText="Tipo" style="width: 20%">
+                    <h:outputText value="#{item.tipo}"/>
+                </p:column>
+                <p:column headerText="Largura (Metros)" style="width: 20%">
+                    <h:outputText value="#{item.largura}"/>
+                </p:column>
+                  <p:column headerText="Área Total (Metros)" style="width: 20%">
+                      <h:outputText value="#{item.CalculaÁreaTotal()}"/>
+                </p:column>        
+               <p:column headerText="Valor por metro (R$)" style="width: 20%">
+                 
+                   <h:outputText value="#{item.CalculaValorPorMetroQuadrado()}">
+                         <f:convertNumber maxFractionDigits="2" currencySymbol="R$" type="currency"/>
+                   </h:outputText>
+                </p:column>        
+               
+               <p:column headerText="Operações" style="width: 24%">
+                    <p:commandButton icon="ui-icon-search" oncomplete="PF('widDialVisualizaProduto').show()" 
+                                     update=":formCadastroProduto:dialVisualizaProduto" style="width: 32%">
+                        <f:setPropertyActionListener value="#{item}" target="#{produtoController.selectedProduto}"/>
+                        </p:commandButton>
+                    <p:commandButton icon="ui-icon-wrench" oncomplete="PF('widDialAlteraProduto').show()" style="width: 32%"
+                                     update=":formDialAlteraProduto">
+                    <f:setPropertyActionListener value="#{item}" target="#{produtoController.selectedProduto}"/>
+                    </p:commandButton>
+                    <p:commandButton icon="ui-icon-closethick" oncomplete="PF('widDialDeletaProduto').show()"  style="width: 32%" 
+                                     update=":formCadastroProduto:dialDeletaProduto">
+                        <f:setPropertyActionListener value="#{item}" target="#{produtoController.selectedProduto}"/>
+                        </p:commandButton>    
+                </p:column>
+            </p:dataTable>
+                 <p:commandButton value="Novo Produto" oncomplete="PF('widDialCadProduto').show()" />
+
+            <p:dialog id="dialVisualizaProduto" visible="false" modal="false"
+                      resizable="false" widgetVar="widDialVisualizaProduto"
+                      header="Dados do Produto" >
+                <p:panelGrid columns="2">
+                    <h:outputText value="Código:"/>
+                    <h:outputText value="#{produtoController.selectedProduto.codigo}"/>
+
+                    <h:outputText value="Tipo:"/>
+                    <h:outputText value="#{produtoController.selectedProduto.tipo}"/>
+
+                    <h:outputText value="Altura: (Metros)"/>
+                    <h:outputText value="#{produtoController.selectedProduto.altura}"/>
+
+                    <h:outputText value="Largura: (Metros)"/>
+                    <h:outputText value="#{produtoController.selectedProduto.largura}"/>
+                    
+                    <h:outputText value="Área Total: (Metros)"/>
+                    <h:outputText value="#{produtoController.selectedProduto.CalculaÁreaTotal()}"/>
+                   
+                    <h:outputText value="Valor Entrada: (R$)"/>
+                    <h:outputText value="#{produtoController.selectedProduto.valorEntrada}"/>
+                    
+                    <h:outputText value="Valor/m: (R$)" />
+                    <h:outputText value="#{produtoController.selectedProduto.CalculaValorPorMetroQuadrado()}">
+                                  <f:convertNumber maxFractionDigits="2" currencySymbol="R$" type="currency" />
+                    </h:outputText>
+                        
+
+
+                </p:panelGrid>
+                <p:commandButton value="fechar" oncomplete="PF('widDialVisualizaProduto').hide()"/>
+            </p:dialog>
+            
+            <p:dialog id="dialDeletaProduto" visible="false" modal="false"
+                      resizable="false" widgetVar="widDialDeletaProduto"
+                      header="Dados do Produto">
+                <p:panelGrid columns="2">
+                    <h:outputText value="Código:"/>
+                    <h:outputText value="#{produtoController.selectedProduto.codigo}"/>
+
+                    <h:outputText value="Tipo:"/>
+                    <h:outputText value="#{produtoController.selectedProduto.tipo}"/>
+
+                    <h:outputText value="Altura:"/>
+                    <h:outputText value="#{produtoController.selectedProduto.altura}"/>
+
+                    <h:outputText value="Largura:"/>
+                    <h:outputText value="#{produtoController.selectedProduto.largura}"/>
+                   
+                    <h:outputText value="Área Total:"/>
+                    <h:outputText value="#{produtoController.selectedProduto.CalculaÁreaTotal()}"/>
+                    
+                    <h:outputText value="Valor Entrada:"/>
+                    <h:outputText value="#{produtoController.selectedProduto.valorEntrada}">
+                         <f:convertNumber maxFractionDigits="2" />
+                    </h:outputText>
+
+
+                </p:panelGrid>
+                <p:commandButton value="Deletar" action="#{produtoController.deletar(produtoController.selectedProduto)}" oncomplete="PF('widDialDeletaProduto').hide()"
+                                 update="@form"/>
+            </p:dialog>
+
+        </h:form>
+
+                  
+            
+        <p:dialog id="dialCadProduto" visible="false" modal="false" resizable="false"
+                  widgetVar="widDialCadProduto" header="Cadastrar Produto">
+
+            <h:form id="formDialCadProduto">
+              
+                <p:fieldset legend="Cadastrar Produto">
+                    <p:panelGrid columns="3">                      
+                        <h:outputText value="Tipo*:"/>
+                        <p:inputText id="txtTipo" value="#{produtoController.produtoCadastro.tipo}"
+                                     required="true" requiredMessage="O TIpo é obrigatório"/>
+                        <p:message for="txtTipo"/>
+                        
+                        <h:outputText value="Altura:(Metros)"/>
+                         <h:outputText id="txtAltura" value="#{produtoController.produtoCadastro.altura}"/>
+                        <p:message for="txtAltura"/>
+
+                        <h:outputText value="Largura:(Metros)"/>
+                        <p:inputText id="txtLargura" value="#{produtoController.produtoCadastro.largura}"
+                                     required="true" requiredMessage="O Largura é obrigatório"/>
+                        <p:message for="txtLargura"/>
+                        
+                         <h:outputText value="Valor Entrada: (R$)"/>
+                         <p:inputText id="txtVE" value="#{produtoController.produtoCadastro.valorEntrada}"
+                                      
+                                     required="true" requiredMessage="O Valor é obrigatório"> 
+                         <f:convertNumber pattern="#,##0.00"/>
+                         </p:inputText>
+                        <p:message for="txtVE"/>
+                    
+                    </p:panelGrid>
+                    <p:commandButton value="Cadastrar" action="#{produtoController.inserir()}"
+                                     oncomplete="PF('widDialCadProduto').hide()" 
+                                     update=':formCadastroProduto :gro @form' />
+                </p:fieldset>
+            </h:form>
+        </p:dialog>
+     
+        <p:dialog id="dialAlteraProduto" visible="false" modal="false" resizable="false"
+                  widgetVar="widDialAlteraProduto" header="Alterar Produto">
+            <h:form id="formDialAlteraProduto">
+                <p:fieldset legend="Alterar produto">
+                    <p:panelGrid columns="3">
+                       <h:outputText value="Tipo*:"/>
+                       <h:outputText id="txtTipo" value="#{produtoController.selectedProduto.tipo}"/>
+                                     
+                        <p:message for="txtTipo"/>
+
+                        <h:outputText value="Altura:"/>
+                        <h:outputText id="txtAltura" value="#{produtoController.selectedProduto.altura}"/>
+                        <p:message for="txtAltura"/>
+
+                        <h:outputText value="Largura:"/>
+                        <p:inputText id="txtLargura" value="#{produtoController.selectedProduto.largura}"
+                                     required="true" requiredMessage="O Largura é obrigatório"/>
+                        <p:message for="txtLargura"/>
+                        
+                         <h:outputText value="Valor Entrada:"/>
+                         <p:inputText id="txtVE" value="#{produtoController.selectedProduto.valorEntrada}"
+                                     required="true" requiredMessage="O Valor é obrigatório"/>
+                        <p:message for="txtVE"/>
+                    
+                    </p:panelGrid>
+                    
+                    <p:commandButton value="Alterar" action="#{produtoController.alterar(produtoController.selectedProduto)}"
+                                     oncomplete="PF('widDialAlteraProduto').hide()" 
+                                     update=':formCadastroProduto :gro @form'/>
+                </p:fieldset>
+            </h:form>
+        </p:dialog>
+           </p:layoutUnit>
+          <p:layoutUnit id="sul" position="south" size="70" >
+            <!-- BAIXO-->
+            <h10> Software desenvolvido pela MVP Softwares ®</h10>
+            <h:graphicImage value = "/imagens/MVP.png" width="100px" id="mvp" style="float:right;"/>
+            </p:layoutUnit>
+        </p:layout>
+      </h:body>
+</html>

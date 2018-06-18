@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>SB Gráfica</title>
+        <link rel="shortcut icon" href="https://raw.githubusercontent.com/ifpe-cti/sysgraph/master/docs/favicon(1).ico" type="image/x-icon"/>
+        <link rel="icon" href="https://raw.githubusercontent.com/ifpe-cti/sysgraph/master/docs/favicon(1).ico" type="image/x-icon"/>
+    </h:head>
+    <h:body>
+
+        <p:layout fullPage="true">
+
+            <p:layoutUnit id="top" position="north" size="130" >
+                <!-- topo-->
+
+                <center><h:graphicImage value = "/imagens/logo.png" width="20%"/></center>
+
+            </p:layoutUnit>
+
+            <p:layoutUnit id="left" position="west"  resizable="false"  closable="false" collapsible="false" header="Menu"  size="265" >
+                <!-- esquerda com menu-->
+                <h:form>
+                    <p:menu>
+
+                        <p:menuitem value="Home" url="index.xhtml" icon="ui-icon-home"/>
+
+                        <p:menuitem value="Vendas" url="venda.xhtml"/>
+
+                        <p:menuitem value="Produto" url="produtos.xhtml"/>
+
+                        <p:menuitem value="Estoque" url="crudLei.xhtml"/>      
+
+                        <p:menuitem value="Funcionários" url="funcionario.xhtml"/>   
+
+                        <p:menuitem value="Clientes" url="cliente.xhtml"/>      
+
+                        <p:menuitem value="Log do Sistema" url="log.xhtml"/>     
+
+                        <p:menuitem value="Relatórios Financeiros" url="mensal.xhtml"/>
+                    </p:menu>
+
+
+
+                </h:form>
+            </p:layoutUnit>
+
+            <p:layoutUnit id="center" position="center" header="Venda">
+                <!--centro-->
+                <p:growl id="gro" showDetail="true" showSummary="true"/>
+                <h:form id="formCadastroVenda">        
+
+                    <p:dataTable var="item" value="#{vendaController.recuperarTodosVendas()}"
+                                 rowKey="#{item.codigo}" paginator="true"
+                                 rows="7">
+
+                        <p:column headerText="Codigo" style="width: 8%">
+                            <h:outputText value="#{item.codigo}"/>
+                        </p:column> 
+                        <p:column headerText="Descrição" style="width: 30%">
+                            <h:outputText value="#{item.descrição}"/>
+                        </p:column>  
+                        <p:column headerText="Data Entrega" style="width: 20%">
+                            <h:outputText value="#{item.dataEntrega}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Largura (Metros)" style="width: 20%">
+                            <h:outputText value="#{item.larguraSaida}"/>
+                        </p:column>
+                        <p:column headerText="Altura (Metros)" style="width: 20%">
+                            <h:outputText value="#{item.alturaSaida}" />
+                        </p:column>        
+                        <p:column headerText="Quantidade" style="width: 20%">
+                            <h:outputText value="#{item.quantidade}"/>
+                        </p:column>    
+                        <p:column headerText="Valor Final (R$)" style="width: 20%">
+                            <h:outputText value="#{item.CalculaValorTotal()}"/>
+                        </p:column>  
+                         <p:column headerText="Cliente" style="width: 20%">
+                             <h:outputText value="#{item.cliente.nome}"/>
+                        </p:column>
+                       
+                        <p:column headerText="Operações" style="width: 24%">
+                            <p:commandButton icon="ui-icon-search" oncomplete="PF('widDialVisualizaVenda').show()" 
+                                             update=":formCadastroVenda:dialVisualizaVenda" style="width: 32%">
+                                <f:setPropertyActionListener value="#{item}" target="#{vendaController.selectedVenda}"/>
+                            </p:commandButton>
+                            <p:commandButton icon="ui-icon-wrench" oncomplete="PF('widDialAlteraVenda').show()" style="width: 32%"
+                                             update=":formDialAlteraVenda">
+                                <f:setPropertyActionListener value="#{item}" target="#{vendaController.selectedVenda}"/>
+                            </p:commandButton>
+                            <p:commandButton icon="ui-icon-closethick" oncomplete="PF('widDialDeletaVenda').show()"  style="width: 32%" 
+                                             update=":formCadastroVenda:dialDeletaVenda">
+                                <f:setPropertyActionListener value="#{item}" target="#{vendaController.selectedVenda}"/>
+                            </p:commandButton>    
+                        </p:column>
+                    </p:dataTable>
+                    <p:commandButton value="Novo Venda" oncomplete="PF('widDialCadVenda').show()" />
+
+                    <p:dialog id="dialVisualizaVenda" visible="false" modal="false"
+                              resizable="false" widgetVar="widDialVisualizaVenda"
+                              header="Dados do Venda" >
+                        <p:panelGrid columns="2">
+                            <h:outputText value="Código:"/>
+                            <h:outputText value="#{vendaController.selectedVenda.codigo}"/>
+
+                            <h:outputText value="Descrição"/>
+                            <h:outputText value="#{vendaController.selectedVenda.descrição}"/>
+                            <h:outputText value="Data Pedido"/>
+                            <h:outputText value="#{vendaController.selectedVenda.dataPedido}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                            <h:outputText value="Data Entrega"/>
+                            <h:outputText value="#{vendaController.selectedVenda.dataEntrega}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                            <h:outputText value="largura: (Metros)"/>
+                            <h:outputText value="#{vendaController.selectedVenda.larguraSaida}"/>
+
+                            <h:outputText value="Altura (Metros)" />
+                            <h:outputText value="#{vendaController.selectedVenda.alturaSaida}"/>
+
+                            <h:outputText value="Quantidade" />
+                            <h:outputText value="#{vendaController.selectedVenda.quantidade}"/>
+
+                            <h:outputText value="Valor/m: (R$)" />
+                            <h:outputText value="#{vendaController.selectedVenda.valorPorMetro}"/>
+
+                            <h:outputText value="Valor Total: (R$)" />
+                            <h:outputText value="#{vendaController.selectedVenda.CalculaValorTotal()}"/>
+                           
+                             <h:outputText value="Cliente" />
+                             <h:outputText value="#{vendaController.selectedVenda.cliente.nome}"/>
+                           
+                       
+
+
+                        </p:panelGrid>
+                        <p:commandButton value="fechar" oncomplete="PF('widDialVisualizaVenda').hide()"/>
+                    </p:dialog>
+
+                    <p:dialog id="dialDeletaVenda" visible="false" modal="false"
+                              resizable="false" widgetVar="widDialDeletaVenda"
+                              header="Dados do Venda">
+                        <p:panelGrid columns="2">
+                            <h:outputText value="Código:"/>
+                            <h:outputText value="#{vendaController.selectedVenda.codigo}"/>
+
+                            <h:outputText value="Descrição"/>
+                            <h:outputText value="#{vendaController.selectedVenda.descrição}"/>
+
+                         
+                            <h:outputText value="Data Pedido"/>
+                            <h:outputText value="#{vendaController.selectedVenda.dataPedido}"/>
+
+                            <h:outputText value="Data Entrega"/>
+                            <h:outputText value="#{vendaController.selectedVenda.dataEntrega}"/>
+
+                            <h:outputText value="largura: (Metros)"/>
+                            <h:outputText value="#{vendaController.selectedVenda.larguraSaida}"/>
+
+                            <h:outputText value="Altura (Metros)" />
+                            <h:outputText value="#{vendaController.selectedVenda.alturaSaida}"/>
+
+                            <h:outputText value="Quantidade" />
+                            <h:outputText value="#{vendaController.selectedVenda.quantidade}"/>
+
+                            <h:outputText value="Valor/m: (R$)" />
+                            <h:outputText value="#{vendaController.selectedVenda.valorPorMetro}"/>
+
+                            <h:outputText value="Valor Total: (R$)" />
+                            <h:outputText value="#{vendaController.selectedVenda.CalculaValorTotal()}"/>
+
+                        </p:panelGrid>
+                        <p:commandButton value="Deletar" action="#{vendaController.deletar(vendaController.selectedVenda)}" oncomplete="PF('widDialDeletaVenda').hide()"
+                                         update="@form"/>
+                    </p:dialog>
+
+                </h:form>
+
+
+
+                <p:dialog id="dialCadVenda" visible="false" modal="false" resizable="false"
+                          widgetVar="widDialCadVenda" header="Cadastrar Venda">
+
+                    <h:form id="formDialCadVenda">
+
+                        <p:fieldset legend="Cadastrar Venda">
+                            <p:panelGrid columns="3">                      
+                                <h:outputText value="Descrição"/>
+                                <p:inputText id="txtDescr" value="#{vendaController.vendaCadastro.descrição}"
+                                             required="true" requiredMessage="O Descrição é obrigatório"/>
+                                <p:message for="txtDescr"/>
+
+                                <h:outputLabel for="mask" value="Data Pedido:" />
+                                <p:calendar id="mask" value="#{vendaController.vendaCadastro.dataPedido}" pattern="dd-MM-yyyy" mask="true" 
+                                            required="true" requiredMessage="O data pedido é obrigatório"/>
+                                <p:message for="mask"/>
+
+                                <h:outputLabel for="mask" value="Data Entrega:" />
+                                <p:calendar id="mask1" value="#{vendaController.vendaCadastro.dataEntrega}" pattern="dd-MM-yyyy" mask="true" 
+                                            required="true" requiredMessage="O data entrega é obrigatório"/>
+                                <p:message for="mask1"/>
+
+                                <h:outputText value="Altura:(Metros)"/>
+                                <p:inputText id="txtAltura" value="#{vendaController.vendaCadastro.alturaSaida}"
+                                             required="true" requiredMessage="O altura é obrigatório"/>
+                                <p:message for="txtAltura"/>
+
+                                <h:outputText value="Largura:(Metros)"/>
+                                <p:inputText id="txtLargura" value="#{vendaController.vendaCadastro.larguraSaida}"
+                                             required="true" requiredMessage="O Largura é obrigatório"/>
+                                <p:message for="txtLargura"/>
+
+                                <h:outputText value="Quantidade: "/>
+                                <p:inputText id="txtQtde" value="#{vendaController.vendaCadastro.quantidade}"
+                                             required="true" requiredMessage="O Quantidade é obrigatório"/>
+                                <p:message for="txtQtde"/>
+                                
+                                
+                                <h:outputText value="Valor/m (R$): "/>
+                                <p:inputText id="txtValor" value="#{vendaController.vendaCadastro.valorPorMetro}"
+                                             required="true" requiredMessage="O valor é obrigatório"/>
+                                <p:message for="txtValor"/>
+                                
+                                <h:outputText value="Clientes:" />
+                                <p:selectOneListbox id="clientes" value="#{vendaController.vendaCadastro.cliente}" converter="clienteConverter" filter="true" filterMatchMode="contains" required="true" requiredMessage="O Cliente é obrigatório">
+                                    <f:selectItems value="#{clienteController.recuperarTodosClientes()}" var="cliente" itemLabel="#{cliente.nome}" itemValue="#{cliente}" />
+                                </p:selectOneListbox>
+                                <h:outputText />
+  
+                            </p:panelGrid>
+                            <p:commandButton value="Cadastrar" action="#{vendaController.inserir()}"
+                                             oncomplete="PF('widDialCadVenda').hide()" 
+                                             update=':formCadastroVenda :gro @form' />
+                        </p:fieldset>
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="dialAlteraVenda" visible="false" modal="false" resizable="false"
+                          widgetVar="widDialAlteraVenda" header="Alterar Venda">
+                    <h:form id="formDialAlteraVenda">
+                        <p:fieldset legend="Alterar venda">
+                            <p:panelGrid columns="3">
+                                <h:outputText value="Descrição"/>
+                                <p:inputText id="txtDescr" value="#{vendaController.selectedVenda.descrição}"/>
+                                <p:message for="txtDescr"/>
+
+                                <h:outputLabel for="mask" value="Data Pedido:" />
+                                <p:calendar id="mask" value="#{vendaController.selectedVenda.dataPedido}" pattern="dd-MM-yyyy" mask="true" />
+                                <p:message for="mask"/>
+
+                                <h:outputLabel for="mask" value="Data Entrega:" />
+                                <p:calendar id="mask1" value="#{vendaController.selectedVenda.dataEntrega}" pattern="dd-MM-yyyy" mask="true" />
+                                <p:message for="mask1"/>
+
+                                <h:outputText value="Altura:(Metros)"/>
+                                <p:inputText id="txtAltura" value="#{vendaController.selectedVenda.alturaSaida}"/>
+                                <p:message for="txtAltura"/>
+
+                                <h:outputText value="Largura:(Metros)"/>
+                                <p:inputText id="txtLargura" value="#{vendaController.selectedVenda.larguraSaida}"
+                                             required="true" requiredMessage="O Largura é obrigatório"/>
+                                <p:message for="txtLargura"/>
+
+                                <h:outputText value="Quantidade: "/>
+                                <p:inputText id="txtQtde" value="#{vendaController.selectedVenda.quantidade}"
+                                             required="true" requiredMessage="O Quantidade é obrigatório"/>
+                                <p:message for="txtQtde"/>
+
+
+                                <h:outputText value="Valor/m (R$): "/>
+                                <p:inputText id="txtValor" value="#{vendaController.selectedVenda.valorPorMetro}"
+                                             required="true" requiredMessage="O valor é obrigatório"/>
+                                <p:message for="txtValor"/>
+                                
+                                <h:outputText value="Clientes:" />
+                                <p:selectOneListbox id="clientes" value="#{vendaController.selectedVenda.cliente}" converter="clienteConverter" filter="true" filterMatchMode="contains" required="true" requiredMessage="O Cliente é obrigatório">
+                                    <f:selectItems value="#{clienteController.recuperarTodosClientes()}" var="cliente" itemLabel="#{cliente.nome}" itemValue="#{cliente}" />
+                                </p:selectOneListbox>
+                                <h:outputText />
+                            </p:panelGrid>
+
+                            <p:commandButton value="Alterar" action="#{vendaController.alterar(vendaController.selectedVenda)}"
+                                             oncomplete="PF('widDialAlteraProduto').hide()" 
+                                             update=':formCadastroVenda :gro @form'/>
+                        </p:fieldset>
+                    </h:form>
+                </p:dialog>
+            </p:layoutUnit>
+            <p:layoutUnit id="sul" position="south" size="70" >
+                <!-- BAIXO-->
+                <h10> Software desenvolvido pela MVP Softwares ®</h10>
+                <h:graphicImage value = "/imagens/MVP.png" width="100px" id="mvp" style="float:right;"/>
+            </p:layoutUnit>
+        </p:layout>
+    </h:body>
+</html>
