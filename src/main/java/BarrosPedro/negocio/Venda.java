@@ -34,16 +34,16 @@ public class Venda implements Serializable {
     @Temporal(TemporalType.DATE)    
     private Date dataEntrega;
     @Column(length = 30)
-    private double alturaSaida;
+    private double alturaSaida=0;
     @Column(length = 15)
-    private double larguraSaida;
+    private double larguraSaida=0;
     @Column(length = 35)
     private int quantidade;
     @Column(length = 35)
     private double valorPorMetro; 
     @Column(length = 35)
     private double valorTotal;
-    @OneToOne
+    @ManyToOne
     private Produto produto;
     @ManyToOne
     private Cliente cliente;
@@ -72,8 +72,12 @@ public class Venda implements Serializable {
         this.produto = produto;    
     }
     
+    public double CalculaMetrosQuadrados(){
+        return this.alturaSaida*this.larguraSaida*this.quantidade;
+    }
+    
      public double CalculaValorTotal(){
-      valorTotal = this.valorPorMetro*(this.alturaSaida*this.larguraSaida*this.quantidade);
+        valorTotal = this.valorPorMetro*CalculaMetrosQuadrados();
         return valorTotal;
     }
     

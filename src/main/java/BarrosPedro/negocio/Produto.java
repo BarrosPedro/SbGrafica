@@ -9,6 +9,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -33,8 +35,12 @@ public class Produto {
     private double valorEntrada;
      @Column(length = 35)
     private double valorPorMetro;
+     @ManyToOne
+    private Venda venda;
+        
      
-    public Produto(int codigo, String descricaoUnica, String tipo, double altura, double largura,double áreaTotal, double valorEntrada, double valorPorMetro) {
+        
+    public Produto(int codigo, String descricaoUnica, String tipo, double altura, double largura,double áreaTotal, double valorEntrada, double valorPorMetro, Venda venda) {
         this.codigo = codigo;
         this.descricaoUnica = descricaoUnica;
         this.tipo = tipo;
@@ -42,7 +48,8 @@ public class Produto {
         this.largura = largura;
         this.áreaTotal = áreaTotal;
         this.valorEntrada = valorEntrada;
-        this.valorPorMetro = valorPorMetro;
+        this.valorPorMetro = valorPorMetro;      
+        this.venda = venda;
     }
       public Produto(int codigo, String descricaoUnica, String tipo, double altura, double largura, double valorEntrada) {
         this.codigo = codigo;
@@ -51,7 +58,7 @@ public class Produto {
         this.altura = altura;
         this.largura = largura;
         this.valorEntrada = valorEntrada;
-       
+     
     }
 
     public Produto() {
@@ -59,7 +66,7 @@ public class Produto {
     }
     
     public double CalculaÁreaTotal(){
-      áreaTotal = this.altura*this.largura;
+      áreaTotal = (this.altura*this.largura);
         return áreaTotal;
     }
     public double CalculaValorPorMetroQuadrado(){
@@ -132,4 +139,22 @@ public class Produto {
         this.valorPorMetro = valorPorMetro;
     }
 
+    public Venda getVenda() {
+        return venda;
+    }
+
+    public void setVenda(Venda venda) {
+        this.venda = venda;
+    }
+    
+
+    
+@Override
+    public boolean equals(Object obj) {
+        if (obj == null || tipo == null) {
+            return false;
+        }
+        
+        return tipo.equals(((Produto)obj).getTipo());
+    }
 }

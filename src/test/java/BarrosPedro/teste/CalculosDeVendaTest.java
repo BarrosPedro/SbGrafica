@@ -23,11 +23,19 @@ public class CalculosDeVendaTest {
        produtoTest.setValorPorMetro(60);
     }
     
+      @Test
+    public void deveCalcularMetrosQuadrados() {
+        double calcula = produtoTest.CalculaMetrosQuadrados();  
+        assertEquals(1.20, calcula, 0.1);
+    }
+    
+    
     @Test
     public void deveCalcularValorTotalVenda() {
         double calcula = produtoTest.CalculaValorTotal();  
         assertEquals(72, calcula, 0.1);
     }
+    
     
      
 

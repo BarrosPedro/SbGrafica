@@ -89,6 +89,9 @@ and open the template in the editor.
                          <p:column headerText="Cliente" style="width: 20%">
                              <h:outputText value="#{item.cliente.nome}"/>
                         </p:column>
+                        <p:column headerText="Produto" style="width: 20%">
+                            <h:outputText value="#{item.produto.tipo}"/>
+                        </p:column>
                        
                         <p:column headerText="Operações" style="width: 24%">
                             <p:commandButton icon="ui-icon-search" oncomplete="PF('widDialVisualizaVenda').show()" 
@@ -141,6 +144,9 @@ and open the template in the editor.
                            
                              <h:outputText value="Cliente" />
                              <h:outputText value="#{vendaController.selectedVenda.cliente.nome}"/>
+                              <h:outputText value="Produto" />
+                              <h:outputText value="#{vendaController.selectedVenda.produto.tipo}"/>
+                           
                            
                        
 
@@ -238,6 +244,12 @@ and open the template in the editor.
                                     <f:selectItems value="#{clienteController.recuperarTodosClientes()}" var="cliente" itemLabel="#{cliente.nome}" itemValue="#{cliente}" />
                                 </p:selectOneListbox>
                                 <h:outputText />
+                                  
+                                <h:outputText value="Produto:" />
+                                <p:selectOneListbox id="produtos" value="#{vendaController.vendaCadastro.produto}" converter="produtoConverter" filter="true" filterMatchMode="contains" required="true" requiredMessage="O Produto é obrigatório">
+                                    <f:selectItems value="#{produtoController.recuperarTodosProdutos()}" var="produto" itemLabel="#{produto.tipo}, #{produto.largura}" itemValue="#{produto}" />
+                                </p:selectOneListbox>
+                                <h:outputText />
   
                             </p:panelGrid>
                             <p:commandButton value="Cadastrar" action="#{vendaController.inserir()}"
@@ -288,6 +300,12 @@ and open the template in the editor.
                                     <f:selectItems value="#{clienteController.recuperarTodosClientes()}" var="cliente" itemLabel="#{cliente.nome}" itemValue="#{cliente}" />
                                 </p:selectOneListbox>
                                 <h:outputText />
+                                <h:outputText value="Produto:" />
+                                <p:selectOneListbox id="produtos" value="#{vendaController.vendaCadastro.produto}" converter="produtoConverter" filter="true" filterMatchMode="contains" required="true" requiredMessage="O Produto é obrigatório">
+                                    <f:selectItems value="#{produtoController.recuperarTodosProdutos()}" var="produto" itemLabel="#{produto.tipo},#{produto.largura}" itemValue="#{produto}" />
+                                </p:selectOneListbox>
+                                <h:outputText />
+                                
                             </p:panelGrid>
 
                             <p:commandButton value="Alterar" action="#{vendaController.alterar(vendaController.selectedVenda)}"
