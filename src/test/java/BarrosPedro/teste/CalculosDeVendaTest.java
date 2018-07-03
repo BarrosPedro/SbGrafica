@@ -1,6 +1,5 @@
 
 package BarrosPedro.teste;
-
 import BarrosPedro.negocio.Venda;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -23,7 +22,7 @@ public class CalculosDeVendaTest {
        produtoTest.setValorPorMetro(60);
     }
     
-      @Test
+    @Test
     public void deveCalcularMetrosQuadrados() {
         double calcula = produtoTest.CalculaMetrosQuadrados();  
         assertEquals(1.20, calcula, 0.1);
@@ -35,9 +34,5 @@ public class CalculosDeVendaTest {
         double calcula = produtoTest.CalculaValorTotal();  
         assertEquals(72, calcula, 0.1);
     }
-    
-    
-     
-
 }
  

@@ -33,9 +33,9 @@ public class Produto {
     private double áreaTotal;
     @Column(length = 35)
     private double valorEntrada;
-     @Column(length = 35)
+    @Column(length = 35)
     private double valorPorMetro;
-     @ManyToOne
+    @ManyToOne
     private Venda venda;
         
      

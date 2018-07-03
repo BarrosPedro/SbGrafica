@@ -33,7 +33,4 @@ public class CalculosDeProdutoTest {
         double calcula = produtoTest.CalculaValorPorMetroQuadrado();  
         assertEquals(6, calcula, 0.1);
     }
-   
-
-}
- 
+} 
