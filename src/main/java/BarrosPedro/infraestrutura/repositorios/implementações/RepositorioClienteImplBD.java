@@ -28,7 +28,6 @@ public class RepositorioClienteImplBD implements RepositorioGenerico<Cliente, In
            return null;
        }
     }
-    
 
     @Override
     public void deletar(Cliente t) {
