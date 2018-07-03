@@ -1,6 +1,7 @@
 package BarrosPedro.teste;
 
 import BarrosPedro.infraestrutura.repositorios.implementações.RepositorioCliente;
+import BarrosPedro.infraestrutura.repositorios.implementações.RepositorioClienteImplBD;
 import BarrosPedro.negocio.Cliente;
 import BarrosPedro.negocio.Venda;
 import org.junit.Test;
@@ -10,7 +11,7 @@ import org.junit.Ignore;
 
 public class RepositorioClienteTest {
 
-    RepositorioCliente repClientTest;
+    RepositorioClienteImplBD repClientBDTest;
     Cliente clientTest;
 
     public RepositorioClienteTest() {
@@ -18,9 +19,10 @@ public class RepositorioClienteTest {
 
     @Before
     public void setUp() {
-        repClientTest = new RepositorioCliente();
+        repClientBDTest = new RepositorioClienteImplBD();
+        
         clientTest = new Cliente();
-        clientTest.setCodigo(1);
+        clientTest.setCodigo(18);
         clientTest.setCPFCNPJ("A");
         clientTest.setEmail("A");
         clientTest.setIdade(11);
@@ -31,8 +33,10 @@ public class RepositorioClienteTest {
 
     @Test
     public void deveConferirSeClienteEstáSendoInserido() {
-        repClientTest.inserir(clientTest);
-        assertEquals(repClientTest.recuperarTodos().get(0).getCodigo(), clientTest.getCodigo());
+        repClientBDTest.inserir(clientTest);
+        assertEquals(clientTest.getCodigo(), repClientBDTest.recuperar(Integer.SIZE).equals(this.clientTest.getCodigo()));
     }
+    
+    
 
 }

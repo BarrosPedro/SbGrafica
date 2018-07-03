@@ -28,6 +28,7 @@ public class RepositorioClienteImplBD implements RepositorioGenerico<Cliente, In
            return null;
        }
     }
+    
 
     @Override
     public void deletar(Cliente t) {
@@ -40,6 +41,5 @@ public class RepositorioClienteImplBD implements RepositorioGenerico<Cliente, In
         return PersistenceDao.getInstance().read("select a from Cliente a");
 
     }
-
     
 }
