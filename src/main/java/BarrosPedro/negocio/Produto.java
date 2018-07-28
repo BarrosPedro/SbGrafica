@@ -70,9 +70,7 @@ public class Produto {
         return áreaTotal;
     }
    public double CalculaValorPorMetroQuadrado(){
-        if(this.valorPorMetro==0 || this.CalculaÁreaTotal()==0){
-            throw new IllegalArgumentException("Você não pode dividir por 0.");
-        }
+       
         valorPorMetro = valorEntrada/CalculaÁreaTotal();
         return valorPorMetro;
     }
